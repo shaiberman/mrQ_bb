@@ -5,15 +5,15 @@
 clear,clc
 
 %% define data dirs
-mainDir = '../bb11';
+mainDir = '/ems/elsc-labs/mezer-a/shai.berman/Documents/Code/testing_pipelines/mrQ_baby_Kalanit/bb08';
 indir = fullfile(mainDir,'input'); % here I have the spgr images, and an SEIR diuretory containing the ouptut of Hua's script
-outdir = fullfile(mainDir,'output'); % the mrQ will be saved here
+outdir = fullfile(mainDir,'output_RB_someRatios_lrgMask'); % the mrQ will be saved here
 addpath(genpath(fullfile(fileparts(mainDir),'code')))
 
 %% define the SPGR hdr info:
 inputData_spgr.rawDir =indir;
 % A list of nifti names  (a unique string from the names is enough)
-spnames = dir(fullfile(indir,'20764*.nii.gz')); % the number is changed according to the scan
+spnames = dir(fullfile(indir,'20695*.nii.gz')); % the number is changed according to the scan
 for ii=1:length(spnames)
     inputData_spgr.name{ii}=spnames(ii).name;
     nii = readFileNifti(fullfile(indir,spnames(ii).name));
@@ -33,11 +33,11 @@ inputData_spgr.fieldStrength=3 * ones(1,length(spnames)); % The  field strength 
 % will be saved in the output directpry to overcome some of the code
 % expectations. 
 % organize the data into a structure
-t1 = readFileNifti(fullfile(indir,'SEIR','20764_3_1_t1fit_t1.nii.gz'));
-a  = readFileNifti(fullfile(indir,'SEIR','20764_3_1_t1fit_a.nii.gz'));
-b  = readFileNifti(fullfile(indir,'SEIR','20764_3_1_t1fit_b.nii.gz'));
-res = readFileNifti(fullfile(indir,'SEIR','20764_3_1_t1fit_res.nii.gz'));
-bm  = readFileNifti(fullfile(indir,'SEIR','20764_3_1_t1fit_brain_mask.nii.gz'));
+t1 = readFileNifti(fullfile(indir,'SEIR','20695_3_1_t1fit_t1.nii.gz'));
+a  = readFileNifti(fullfile(indir,'SEIR','20695_3_1_t1fit_a.nii.gz'));
+b  = readFileNifti(fullfile(indir,'SEIR','20695_3_1_t1fit_b.nii.gz'));
+res = readFileNifti(fullfile(indir,'SEIR','20695_3_1_t1fit_res.nii.gz'));
+bm  = readFileNifti(fullfile(indir,'SEIR','20695_3_1_t1fit_brain_mask.nii.gz'));
 
 ll_T1(:,:,:,1)=t1.data;
 ll_T1(:,:,:,2)=a.data;
@@ -68,7 +68,7 @@ if ~exist(mapLink)
     if a~=0, disp(b),end
 end
 
-inBM = fullfile(indir,'SEIR','20764_3_1_t1fit_brain_mask.nii.gz');% this path depends on the name of the input file
+inBM = fullfile(indir,'SEIR','20695_3_1_t1fit_brain_mask.nii.gz');% this path depends on the name of the input file
 bmLink = fullfile(SEIRoutDir,'T1_SEIR_BM.nii.gz'); % this path needs to remain as is, because the code then looks for this specific path
 if ~exist(bmLink)
     [a,b]= system(['ln -s ' inBM ' ' bmLink ]);

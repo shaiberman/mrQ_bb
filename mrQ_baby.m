@@ -2,28 +2,34 @@
 % In this script, we assume the input include VFAs for SPGRs and several ITs for the SEIR scans.
 %%
 clear,clc
+addpath(genpath('/ems/elsc-labs/mezer-a/shai.berman/Documents/Code/git/mrQ_bb'))
 
 %% define data dirs
-mainDir = '../bb07';
-indir = fullfile(mainDir,'input'); % here I have the spgr and seir images
-outdir = fullfile(mainDir,'output'); % the mrQ will be saved here
+
+mainDir = '/ems/elsc-labs/mezer-a/shai.berman/Documents/Code/testing_pipelines/mrQ_baby_Kalanit/bb07'; %% check vox x=34 y=26 z=25 where the bias is large
+indir = fullfile(mainDir,'input2'); % here I have the spgr and seir images
+outdir = fullfile(mainDir,'output_RBreg_smlMsk'); % the mrQ will be saved here
 addpath(genpath(fullfile(fileparts(mainDir),'code')))
 
 
 %% define the SPGR hdr info:
 inputData_spgr.rawDir =indir;
 % A list of nifti names  (a unique string from the names is enough)
-spnames = dir(fullfile(indir,'20670*.nii.gz'));% the number is changed according to the scan
+spnames = dir(fullfile(indir,'SPGR*.nii.gz'));% the number is changed according to the scan
 for ii=1:length(spnames)
     inputData_spgr.name{ii}=spnames(ii).name;
     nii = readFileNifti(fullfile(indir,spnames(ii).name));
     
-    st=regexp(nii.descrip,'fa=')+3;
-    ed=regexp(nii.descrip,';ec')-1;
-    inputData_spgr.flipAngle(ii)=str2double(nii.descrip(st:ed)); % The flip angle of each nifti in the list (degree)
+%     st=regexp(nii.descrip,'fa=')+3;
+%     ed=regexp(nii.descrip,';ec')-1;
+%     inputData_spgr.flipAngle(ii)=str2double(nii.descrip(st:ed)); % The flip angle of each nifti in the list (degree)
+
+   st=regexp(spnames(ii).name,'FA')+2;
+    ed=regexp(spnames(ii).name,'_smap')-1;
+    inputData_spgr.flipAngle(ii)=str2double(spnames(ii).name(st:ed)); % The flip angle of each nifti in the list (degree)
 end
 
-inputData_spgr.TR = 14 * ones(1,length(spnames));  % the TR of each nifti in the list (msec)\
+inputData_spgr.TR = 14 * ones(1,length(spnames));  % The TR of each nifti in the list (msec)\
 inputData_spgr.TE = 3 * ones(1,length(spnames)); % The TE of each nifti in the list (msec)
 inputData_spgr.fieldStrength=3 * ones(1,length(spnames)); % The  field strength of each nifti in the list (Tesla)
 
@@ -39,12 +45,13 @@ for ii=1:length(senames)
     ed=regexp(senames(ii).name,'.nii')-1;
     inputData_seir.IT(ii) =str2double( senames(ii).name(st:ed)); % The inversion time of each nifti in the list (msec)
 end
+
 inputData_seir.TR = 3000 * ones(1,length(senames));  % the TR of each nifti in the list (msec)
 inputData_seir.TE = 40 * ones(1,length(senames));    % The TE of each nifti in the list (msec).
 
 %% runnn
 
-mrQ_run_bb(indir,outdir,inputData_spgr,inputData_seir,[],{'ants_bm',1,'refIm',nan,'testR1_BM',1,'AntsThresh',0.5})
+mrQ_run_bb(indir,outdir,inputData_spgr,inputData_seir,[],{'ants_bm',1,'refIm',nan,'testR1_BM',1,'AntsThresh',0.6})
 
 % mrQ_run_bb calls some functions differently, such that the brainmask will
 % be calculated differently and the assumptions on T1 values in WM will be

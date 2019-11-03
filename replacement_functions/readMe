@@ -1,0 +1,16 @@
+%% latest update: 4/11/2019
+
+The code now uses SP< linear registation for SPGR-SEIR alignment. 
+The following function were replaced: 
+mrQ_Call_AntsAlign_forSEIRMAP_SPGR_bb >> mrQ_Call_RigidAlign_forSEIRMAP_SPGR_bb
+mrQ_ANTS_warp_SPGR2EPI >> mrQ_SPM_reg_SPGR2EPI
+mrQ_ANTS_warp_EPI2SPGR >> mrQ_SPM_reg_EPI2SPGR (this also uses relaxFirstAlignAll instead of relaxAligAll). 
+
+Further chemnges: 
+mrQ_B1FitMask_bb: used the WARP to create a map for the B1 fit. That 
+part is now commented. 
+
+thoughts:
+in the function mrQ_B1_LRFit
+it might be beneficial to only use "good" ratios, with varience:
+

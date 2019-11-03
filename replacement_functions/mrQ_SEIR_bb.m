@@ -15,9 +15,11 @@ function mrQ=mrQ_SEIR_bb(mrQ)
 % (C) Mezer lab, the Hebrew University of Jerusalem, Israel, Copyright 2016
 
 if  ~isfield(mrQ,'T1map_seir')
-    mrQ=mrQ_Call_AntsAlign_forSEIR_SPGR_bb(mrQ);
+    mrQ=mrQ_Call_RigidAlign_forSEIR_SPGR_bb(mrQ);
+    %   mrQ=mrQ_Call_AntsAlign_forSEIR_SPGR_bb(mrQ);
 elseif exist(mrQ.T1map_seir,'file')
-     mrQ=mrQ_Call_AntsAlign_forSEIRMAP_SPGR_bb(mrQ);
+    %     mrQ=mrQ_Call_AntsAlign_forSEIRMAP_SPGR_bb(mrQ);
+    mrQ=mrQ_Call_RigidAlign_forSEIRMAP_SPGR_bb(mrQ);
 end
 % % % % % if ANTS was unsuccessfull in registring SPGR and EPI, TRY fsl
 % % % % if mrQ.Ants_Info.QuantAntsScore > mrQ.QuantAntsThresh;   

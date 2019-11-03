@@ -28,7 +28,8 @@ function mrQ=mrQ_build_epi2SPGR_B1_bb(mrQ,OutDir,TargetT1file,B1FileName,smoothn
 
 
 if ~isfield(mrQ.Ants_Info,'B1_epi_spgr')
-     mrQ.Ants_Info=mrQ_ANTS_warp_EPI2SPGR(mrQ.Ants_Info,TargetT1file,OutDir,mrQ.B1.epiFileName);
+    % mrQ.Ants_Info=mrQ_ANTS_warp_EPI2SPGR(mrQ.Ants_Info,TargetT1file,OutDir,mrQ.B1.epiFileName);
+     mrQ.Ants_Info=mrQ_SPM_reg_EPI2SPGR(mrQ.Ants_Info,TargetT1file,OutDir,mrQ.B1.epiFileName);
 end
 
 T1=readFileNifti(mrQ.Ants_Info.T1_epi_spgr);
